@@ -1,0 +1,289 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-image: linear-gradient(rgba(68, 68, 56, 0.5), rgba(68, 68, 56, 0.5)),url("../assets/homepage-bg-1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+
+.app-name {
+  color: white;
+}
+
+.app-version {
+  color:aqua;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0px 1px 10px lightcyan;
+}
+
+.app-desc-head, .app-desc-body {
+  color: white;
+}
+
+.app-desc-body p {
+  font-size: 20px;
+  width: 50%;
+  margin: 0px auto 0px auto;
+}
+
+.btn-signin, .btn-signup {
+  padding: 12px;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+  transition: 0.5s ease-in-out;
+}
+
+.btn-signin {
+  border: 1px solid springgreen;
+  background-color: springgreen;
+}
+
+.btn-signin:hover {
+  color: black;
+  border: 1px solid lime;
+  background-color: lime;
+  box-shadow: 0px 1px 10px lime;
+}
+
+.btn-signup {
+  border: 1px solid #FCF55F;
+  background-color: #FCF55F;
+}
+
+.btn-signup:hover {
+  color: black;
+  border: 1px solid #FFEA00;
+  background-color:#FFEA00;
+  box-shadow: 0px 1px 10px #FFEA00;
+}
+
+
+.page-title {
+  color: white;
+}
+
+.login-input,
+.register-input,
+.book-form-input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gainsboro;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.login-input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gainsboro;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.login-input:focus {
+  border-color: lime;
+  box-shadow: 0px 1px 10px lime;
+  outline: none;
+}
+
+.book-form-submit {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  background-color: gray;
+  transition: 0.5s ease-in-out;
+}
+
+.book-form-submit:hover {
+  border: 1px solid aquamarine;
+  background-color: aqua;
+  box-shadow: 0px 1px 10px aqua;
+}
+
+
+.login-submit {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  background-color: gray;
+  transition: 0.5s ease-in-out;
+}
+
+.login-submit:hover {
+  border: 1px solid lime;
+  background-color: lime;
+  box-shadow: 0px 1px 10px lime;
+}
+
+.register-input:focus {
+  border-color: yellow;
+  box-shadow: 0px 1px 10px yellow;
+  outline: none;
+}
+
+.register-submit {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  background-color: gray;
+  transition: 0.5s ease-in-out;
+}
+
+.register-submit:hover {
+  border: 1px solid yellow;
+  background-color: yellow;
+  box-shadow: 0px 1px 10px yellow;
+}
+
+.action-link {
+  color: white;
+}
+
+.action-link a {
+  text-decoration: none;
+}
+
+.icon-handshake, .icon-smile, .icon-clock {
+  color: yellow;
+  border-radius: 50%;
+  text-shadow: 0px 1px 10px yellow;
+}
+
+.validation-msg {
+  color: red;
+}
+
+.user-profile-details, .user-personal-details, .user-vaccine-details {
+  color: white;
+}
+
+.slot-book-submit {
+  padding: 10px;
+  color: black;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.5s ease-in-out;
+  background-color: aquamarine;
+}
+
+.slot-book-submit:hover {
+  color: black;
+  background-color: aqua;
+  box-shadow: 0px 1px 10px aquamarine;
+}
+
+.logout-submit {
+  background-color: transparent;
+  color: white;
+  border: none;
+  margin-top: 7px;
+}
+
+.user-profile-details h5{
+  padding: 10px;
+  border-radius: 10px;
+  text-shadow: 0px 1px 10px white;
+  box-shadow: 0px 1px 5px lightgray;
+  background-color: rgb(241, 241, 241, 0.1);
+}
+
+.admin-desc, .admin-action h5 {
+  color: white;
+}
+
+.icon-jet {
+  color: sandybrown;
+  rotate: -45deg;
+  margin-left: 10px;
+  text-shadow: 0px 1px 10px orange;
+}
+
+.action-approve-table thead tr {
+  background-color: rgba(253, 239, 81, 0.7);
+}
+
+.action-approve-table tbody tr {
+  background-color: rgba(245, 245, 220, 0.7);
+}
+
+.action-approve-table thead th, .action-approve-table tbody td {
+  padding: 2px 5px 2px 5px;
+  border: 1px solid black;
+}
+
+.action-update-slots thead tr {
+  background-color: rgba(0, 195, 255, 0.7);
+}
+
+.action-update-slots tbody tr {
+  background-color: rgba(171, 217, 231, 0.7);
+}
+
+.action-update-slots thead th, .action-update-slots tbody td {
+  padding: 5px 5px 5px 5px;
+  border: 1px solid black;
+}
+
+.admin-slot-update-input {
+  width: 50px;
+  border-radius: 5px;
+  border: 1px solid gainsboro;
+  outline: none;
+}
+
+.admin-slot-update-submit {
+  border: 1px solid lightseagreen;
+  box-shadow: 0px 1px 2px lightseagreen;
+  background-color: lightseagreen;
+  border-radius: 10px;
+  transition: 0.5s ease-in-out;
+}
+
+.admin-slot-update-submit:hover {
+  border: 1px solid yellowgreen;
+  background-color: yellowgreen;
+  box-shadow: 0px 1px 2px lightgreen;
+}
+
+.action-panel, .admin-stats {
+  border-bottom: 1px solid white;
+}
+
+.action-panel-head, .admin-stats-head {
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
+  border: 1px solid white;
+  text-shadow: 0px 1px 10px white;
+  box-shadow: 0px 1px 10px white;
+}
+
+/* img {
+  color:aquamarine;
+} */

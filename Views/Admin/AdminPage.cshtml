@@ -1,0 +1,332 @@
+@{
+    ViewBag.pageTitle = "admin dashboard".ToUpper();
+    ViewBag.pageDesc = "some insights of the compaign to win over Covid19 ";
+    ViewBag.OtherGenderCount = ViewBag.TotalUsersCount - (ViewBag.TotalMaleUsersCount + ViewBag.TotalFemaleUsersCount);
+}
+
+<div class="container">
+    
+    <div class="row mt-5">
+        <div class="admin-desc">
+            <h2> @ViewBag.pageTitle </h2>
+            <p style="color: orange;"> 
+                @ViewBag.pageDesc 
+                <i class="icon-jet fas fa-fighter-jet"></i>
+            </p> 
+        </div>
+    </div>
+
+    <div class="admin-stats row mt-5">
+        <h4 class="admin-stats-head"> App Status </h4>
+        
+        @* Doughnut chart: total user, users with slot booked and without slot booked *@
+        <div class="col col-lg-4 col-md-4 col-sm-4">
+            <h5 style="color: white;">Users Status: Slots Booking</h5>
+
+            <div style="width: 250px; height: 250px;">
+                <canvas id="slotBookingChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+
+            <p>
+                <span style="color: white;">Total Users:</span> 
+                <b style="color: white;"> @ViewBag.TotalUsersCount </b>
+            </p>
+        </div>
+
+        @* Doughnut chart: user approved slots, pending slots *@
+        <div class="col col-lg-4 col-md-4 col-sm-4">
+            <h5 style="color: white;">Users Status: Pending / Approved Slots</h5>
+
+            <div style="width:250px; height: 250px;">
+                <canvas id="slotApproveChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+
+            <p>
+                <span style="color: white;">Total Vaccinated Users:</span>
+                <b style="color:white;">@ViewBag.TotalUsersCountWithApprovedSlots</b>
+            </p>
+
+        </div>
+
+        @* Bar chart: male and female users count *@
+        <div class="col col-lg-4 col-md-4 col-sm-4">
+            <h5 style="color: white;">Users Status: Gender Counts</h5>
+
+            <div style="width: 250px; height: 250px;">
+                <canvas id="userGenderChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+
+            <p>
+                <span style="color: white;">Users Genders (M/F/O):</span>
+                <b style="color: white; font-size: 14px;">
+                    @ViewBag.TotalMaleUsersCount/ 
+                    @ViewBag.TotalFemaleUsersCount/ 
+                    @if(ViewBag.OtherGenderCount == 0)
+                    {
+                        <p>0</p>
+                    }
+                    else { @ViewBag.OtherGenderCount }
+                </b>
+            </p>
+
+
+        </div>
+
+        @* Graph chart: month vs booking *@
+
+        @* Graph chart: month vs approval *@
+
+
+    </div>
+
+    <div class="action-panel row mt-5">
+        <h4 class="action-panel-head">Action Panel</h4>
+
+            @* users list with pending approval *@
+            <div class="admin-action mt-3">
+                <div class="action-approve">
+                    <h5> Registered Users: Booking Details </h5>
+                    <div style="overflow-y: auto;" class="col col-lg-12 col-md-12 col-sm-12">
+                        <table class="action-approve-table table table-hover">
+                            <thead>
+                                <tr >
+                                    <th>Name</th>
+                                    <th>Users Id</th>
+                                    <th>Booking Id</th>
+                                    <th>Dose 1 Date & Vaccine Center</th>
+                                    <th>Dose 2 Date & Vaccine Center</th>
+                                    <th>Vaccination Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="actionApproveTable"> 
+                                @if(ViewBag.UsersWithPendingApproval.Count > 0)
+                                {
+                                    @foreach(var record in ViewBag.UsersWithPendingApproval)
+                                    {
+                                        <tr>
+                                            <td>@record.Username</td>
+                                            <td>@record.UserId</td>
+                                            <td>@record.BookingId</td>
+                                            <td>@record.Dose1Date (<b>@record.D1HospitalName</b>)</td>
+                                            <td>@record.Dose2Date (<b>@record.D1HospitalName</b>)</td>
+                                            <td>
+                                                @if(record.UserVaccinationStatus == 0)
+                                                {
+                                                    <span>Pending</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Approved</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if(record.UserVaccinationStatus == 0)
+                                                {
+                                                    <button class="approveButton btn btn-sm btn-danger" data-userid="@record.UserId" data-bookingid="@record.BookingId">Approve</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-sm btn-success disabled">Approved</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7">
+                                            <h5 style="color:green; text-shadow: 0px 1px 10px limegreen;" class="text-center"> no records/slots token approve for now </h5>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @* hospitals list with available slot details *@
+            <div class="admin-action mt-4">
+                <h5>Hospital Details: Name and Slots Details</h5>
+
+                <div class="class="col col-lg-12 col-md-12 col-sm-12" style="overflow-y: auto;">
+                    <table class="action-update-slots table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hospital ID</th>
+                                <th>Hospital Name</th>
+                                <th>Slots Available</th>
+                                <th>Increase Slots</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actionUpdateSlots">
+                            @foreach(var record in ViewBag.FetchedHospitalsDetails)
+                            {
+                                <tr>
+                                    <td>@record.HospitalId</td>
+                                    <td>@record.HospitalName</td>
+                                    <td>@record.HospitalAvailableSlots</td>
+                                    <td>
+                                        <input type="number" id="increaseSlots_@record.HospitalId" class="admin-slot-update-input" />
+                                        <button type="button" id="increaseSlots" onclick="increaseSlots(@record.HospitalId)" class="admin-slot-update-submit">Update Slots</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+    </div>
+
+
+</div>
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        @* method: approve booked slots *@
+        $(document).on('click', '.approveButton', function() {
+            var userId = $(this).data('userid');
+            var bookingId = $(this).data('bookingid');
+            $.ajax({
+                url: '@Url.Action("ApproveSlotBook", "Admin")',
+                type: 'POST',
+                data: {
+                    userId: userId,
+                    bookingId: bookingId,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() // Include anti-forgery token
+                },
+                success: function(data) {
+                    $('#actionApproveTable').html(data);
+                },
+                error: function(response) {
+                    alert("Error");
+                }
+            });
+        });
+
+        @* method: increase slots *@
+        $(document).on('click', '#increaseSlots', function() {
+            var hospitalId = "H" + $(this).attr('onclick').match(/\d+/)[0];
+            var increaseValue = $('#increaseSlots_' + hospitalId).val();
+                $.ajax({
+                    url: '@Url.Action("IncreaseSlots", "Admin")',
+                    type: 'GET',
+                    data: { 
+                        hospitalId: hospitalId, 
+                        increaseBy: increaseValue,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() // Include anti-forgery token               
+                    },
+                    success: function(data) {
+                        $('#actionUpdateSlots').html(data);
+                    },
+                    error: function() {
+                        alert("An error occurred while increasing slots.");
+                    }
+                });
+            });
+        });
+
+        @* charts *@
+        var totalUsersCount = @ViewBag.TotalUsersCount;
+        var totalUsersCountWithSlotBooked = @ViewBag.TotalUsersCountWithSlotBooked;
+        var totalUsersCountWithoutSlotBooked = totalUsersCount - totalUsersCountWithSlotBooked;
+        var totalUsersCountWithAppovedSlots = @ViewBag.TotalUsersCountWithApprovedSlots;
+        var totalUsersCountWithoutAppovedSlots = totalUsersCountWithSlotBooked - @ViewBag.TotalUsersCountWithApprovedSlots;
+
+        var maleGenderCount = @ViewBag.TotalMaleUsersCount;
+        var femaleGenderCount = @ViewBag.TotalFemaleUsersCount;
+        var otherGenderCount = totalUsersCount - ( maleGenderCount + femaleGenderCount);
+
+        @* user status chart with/without slot booking *@
+        var ctx0 = document.getElementById('slotBookingChart').getContext('2d');
+        var slotBookingChart = new Chart(ctx0, {
+            type: 'doughnut',
+            data: {
+                labels: ['Users with slot booked', 'Users without slot booked'],
+                datasets: [{
+                    data: [totalUsersCountWithSlotBooked, totalUsersCountWithoutSlotBooked],
+                    backgroundColor: ['limegreen', 'orange'],
+                    @* hoverBackgroundColor: ['green', 'tomato'] *@
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: '',
+                    fontColor: 'white'
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white' // Change this to your desired color
+                    }
+                },
+            }
+        });
+
+        @* user status chart with/without slot approved *@
+        var ctx1 = document.getElementById('slotApproveChart').getContext('2d');
+        var slotApproveChart = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Users slots approved', 'Users slots pending'],
+                datasets: [{
+                    data: [totalUsersCountWithAppovedSlots, totalUsersCountWithoutAppovedSlots],
+                    backgroundColor: ['cyan', 'yellow'],
+                    @* hoverBackgroundColor: ['green', 'tomato'] *@
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: '',
+                    fontColor: 'white'
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white' // Change this to your desired color
+                    }
+                },    
+            }
+        });
+
+        @* user gender status *@
+        var ctx2 = document.getElementById('userGenderChart').getContext('2d');
+        var userGenderChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Male', 'Female', 'Others'],
+                datasets: [{
+                    data: [maleGenderCount, femaleGenderCount, otherGenderCount],
+                    backgroundColor: ['tomato','seagreen','lightgray']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: '',
+                    fontColor: 'white'
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white' // Change this to your desired color
+                    }
+                },    
+            }
+        });
+
+    </script>
+}
+
