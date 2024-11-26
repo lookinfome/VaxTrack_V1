@@ -1,22 +1,39 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using v1Remastered.Services;
 using v1Remastered.Dto;
 using v1Remastered.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace v1Remastered.Controllers
 {
+    [Authorize]
     [Route("Admin")]
     public class AdminController:Controller
     {
+        private readonly IAuthService _authService;
         private readonly IAdminService _adminService;
-        public AdminController(IAdminService adminService)
+        private readonly UserManager<AppUserIdentityModel> _userManager;
+        public AdminController(IAuthService authService, IAdminService adminService, UserManager<AppUserIdentityModel> userManager)
         {
+            _authService = authService;
             _adminService = adminService;
+            _userManager = userManager;
         }
 
         [HttpGet("{userid}")]
-        public IActionResult AdminPage()
+        public async Task<IActionResult> AdminPage()
         {
+            // fetch user details from asp-net-user table
+            var loggedInUser = await _userManager.GetUserAsync(User);
+
+            // check user autheticity and role
+            if (loggedInUser == null || !await _userManager.IsInRoleAsync(loggedInUser, "admin"))
+            {
+                await _authService.LogoutUserAsync();
+                return RedirectToAction("LoginUser", "Account");
+            }
+
             // users list with pending approval
             List<AdminDetailsDto_UserWithPendingApproval> _userswWithPendingApproval = _adminService.FetchUsersWithPendingApproval();
             ViewBag.UsersWithPendingApproval = _userswWithPendingApproval;
@@ -54,7 +71,16 @@ namespace v1Remastered.Controllers
             if(approvalStatus)
             {
                 List<AdminDetailsDto_UserWithPendingApproval> _userswWithPendingApproval = _adminService.FetchUsersWithPendingApproval();
-                return PartialView("_FilteredUsersTablePartial", _userswWithPendingApproval.ToList());
+
+                Console.WriteLine($"------------------------------------------------------------------------------------------------------------------------");
+                Console.WriteLine($"------------------------Users count with pending approval:::: {_userswWithPendingApproval.Count}------------------------");
+                Console.WriteLine($"------------------------------------------------------------------------------------------------------------------------");
+
+                if(_userswWithPendingApproval.Count >= 1)
+                {
+                    return PartialView("_FilteredUsersTablePartial", _userswWithPendingApproval.ToList());
+                }
+                return PartialView("_AdminErrorMsgPartial", new List<AdminDetailsDto_UserWithPendingApproval>());
 
             }
             else

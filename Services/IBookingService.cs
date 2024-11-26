@@ -103,7 +103,8 @@ namespace v1Remastered.Services
                     if(bookingDetailsSaveStatus >0)
                     {
                         // update hospital details DB
-                        _v1RemDb.HospitalDetails.Update(availableCenters);
+                        _v1RemDb.HospitalDetails.Update(availableCentersList[0]);
+                        _v1RemDb.HospitalDetails.Update(availableCentersList[1]);
 
                         // update DB
                         result = _v1RemDb.SaveChanges();
@@ -111,12 +112,14 @@ namespace v1Remastered.Services
                     }
                     else
                     {
+                        // result = 500;
                         Console.WriteLine($"-----booking deatils not saved successfully-----");
                     }
 
                 }
                 else
                 {
+                    // result = 404;
                     Console.WriteLine($"-----no centers available right now-----");
                 }
                 

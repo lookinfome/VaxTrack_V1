@@ -15,6 +15,7 @@ namespace v1Remastered.Services
         public string FetchHospitalNameById(string hospitalId);
         public List<HospitalDetailsModel> FetchHospitalsList();
         public HospitalDetailsModel FetchHospitalDeailsById(string hospitalId);
+        public bool FetchSlotAvailableStatus();
     }
 
     public class HospitalService : IHospitalService
@@ -83,7 +84,20 @@ namespace v1Remastered.Services
             return new List<HospitalDetailsModel>();
         }
 
+        // fetch slot available status
+        public bool FetchSlotAvailableStatus()
+        {
+            // extract available slot details
+            HospitalDetailsModel availableCenters = FetchCentersWith2Slots();
+            List<HospitalDetailsModel> availableCentersList = FetchCentersWith1Slots();
 
+            if(string.IsNullOrEmpty(availableCenters.HospitalId) && availableCentersList.Count < 1)
+            {
+                return false;
+            }
+
+            return true;
+        }
     
     }
 

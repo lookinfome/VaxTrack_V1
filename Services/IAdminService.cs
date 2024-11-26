@@ -45,7 +45,7 @@ namespace v1Remastered.Services
             _userVaccineDetailsService = userVaccineDetailsService;
         }
 
-        // users with pending approval
+        // user with pending approval
         public List<AdminDetailsDto_UserWithPendingApproval> FetchUsersWithPendingApproval()
         {
             var usersInfo = from userDetails in _v1RemDb.UserDetails
@@ -54,22 +54,31 @@ namespace v1Remastered.Services
                             join bookingDetails in _v1RemDb.BookingDetails
                             on userVaccinationDetails.UserVaccinationId equals bookingDetails.UserVaccinationId
                             where !string.IsNullOrEmpty(bookingDetails.BookingId) && userVaccinationDetails.UserVaccinationStatus == 0
-                            select new AdminDetailsDto_UserWithPendingApproval
+                            select new
                             {
-                                UserId = userVaccinationDetails.UserId,
-                                Username = userDetails.UserName,
-                                UserVaccinationStatus = userVaccinationDetails.UserVaccinationStatus,
-                                BookingId = bookingDetails.BookingId,
-                                Dose1Date = bookingDetails.Dose1BookDate,
-                                Dose2Date = bookingDetails.Dose2BookDate,
-                                D1HospitalName = _hospitalService.FetchHospitalNameById(bookingDetails.D1HospitalId),
-                                D2HospitalName = _hospitalService.FetchHospitalNameById(bookingDetails.D2HospitalId)
+                                userVaccinationDetails.UserId,
+                                userDetails.UserName,
+                                userVaccinationDetails.UserVaccinationStatus,
+                                bookingDetails.BookingId,
+                                bookingDetails.Dose1BookDate,
+                                bookingDetails.Dose2BookDate,
+                                bookingDetails.D1HospitalId,
+                                bookingDetails.D2HospitalId
                             };
 
-            List<AdminDetailsDto_UserWithPendingApproval> usersList = usersInfo.ToList();
+            var usersList = usersInfo.ToList().Select(user => new AdminDetailsDto_UserWithPendingApproval
+            {
+                UserId = user.UserId,
+                Username = user.UserName,
+                UserVaccinationStatus = user.UserVaccinationStatus,
+                BookingId = user.BookingId,
+                Dose1Date = user.Dose1BookDate,
+                Dose2Date = user.Dose2BookDate,
+                D1HospitalName = _hospitalService.FetchHospitalNameById(user.D1HospitalId),
+                D2HospitalName = _hospitalService.FetchHospitalNameById(user.D2HospitalId)
+            }).ToList();
 
             return usersList.Count > 0 ? usersList : new List<AdminDetailsDto_UserWithPendingApproval>();
-
         }
 
         // approve booked slot

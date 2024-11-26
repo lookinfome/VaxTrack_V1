@@ -11,11 +11,11 @@
 
     <div class="row mt-5 justify-content-center">
 
-        <div class="col col-lg-4 col-md-6 col-sm-12">
+        <div class="col col-lg-3 col-md-6 col-sm-12">
 
             <div class="page-title text-center">
                 <h3> @ViewBag.pageTitle </h3>
-                <span style="font-size: 16px; color: yellow;">
+                <span style="font-size: 16px; color: cyan;">
                     @ViewBag.pageDesc <i class="icon-clock far fa-clock"></i>
                 </span>
             </div>
@@ -52,3 +52,15 @@
     </div>
 
 </div>
+
+@section Scripts{
+
+    <script>
+        function setDose2MinDate() {
+            var dose1Date = document.getElementById("Dose1Date").value;
+            var dose2DateInput = document.getElementById("Dose2Date");
+            dose2DateInput.min = dose1Date;
+            dose2DateInput.value = ""; // Reset the second dose date input
+        }
+    </script>
+}
