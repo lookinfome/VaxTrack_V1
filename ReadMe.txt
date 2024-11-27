@@ -55,3 +55,11 @@ Users can book slots and receive confirmation notifications via email or SMS.
     - Approval and Slot Management: Admins can approve vaccination statuses and update the number of available slots in hospitals.
 
 
+## Fixes and Modifications
+
+- Restructured the application architecture.
+- Added a DTO layer (missing in previous version)
+- Normalized and restructured the model relationships (normalization was missing in previous version)
+- Redefined service methods based on the new model structure.
+- Redesigned and enhanced the admin page with additional charts for better insights.
+- Updated the all-over application UI.
