@@ -1,4 +1,4 @@
-# Vax Track v1.0.0
+# Vax Track v1.1.0
 
 ## New Addition
 - NA
